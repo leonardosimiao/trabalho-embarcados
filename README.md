@@ -1,4 +1,4 @@
 # trabalho-embarcados
 Trabalho da disciplina de sistemas embarcados.
 
-Distribuição eletrônica de frenagem do Baja.
+Desenvolvimento de um sistema de distribuição eletrônica de frenagem do Baja.

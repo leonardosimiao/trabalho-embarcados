@@ -150,9 +150,9 @@ int main() {
     char off[] = "0";
 	mot1 = fopen("/sys/class/gpio/gpio66/value", "w");
 	mot2 = fopen("/sys/class/gpio/gpio67/value", "w");
-	f_ang = fopen("/sys/....", "r";
+	f_ang = fopen("/sys/bus/iio/devices/iio:device/in_voltage4_raw", "r";
 	s_ang = fread( 1, sizeof(on), f_ang);
-	f_lin = fopen("/sys/...", "r");
+	f_lin = fopen("/sys/bus/iio/devices/iio:device/in_voltage0_raw", "r");
 	s_lin = fread( 1, sizeof(on), f_lin);
 	bcd_11 = fopen("/sys/class/gpio/gpio62/value","w");
 	bcd_12 = fopen("/sys/class/gpio/gpio36/value","w");

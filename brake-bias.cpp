@@ -34,15 +34,14 @@ int dezena (float num){
 	a = num/1;
 	b = a/10;
 	return b;
-}*/
-/*
-int fn_11 (float num){
+}
+char fn_11 (float num){
 	int a = unidade (num);
 	int b = a%2;
 	if (b==1){
-		return 1;
+		return '1';
 	} else {
-		return 0;
+		return '0';
 	}
 }
 
@@ -94,7 +93,7 @@ int fn_22 (float num){
 
 int fn_23 (float num){
 	int a = dezena (num);
-	if (a==4|| a==5 || a==6 || a=7){
+	if (a==4|| a==5 || a==6 || a==7){
 		return 1;
 	}else{
 		return 0;
@@ -121,24 +120,42 @@ int fun_lin (float num){
 	a = 30 + 4*a;
 	return a;
 }
-/*
-int analog_to_bcd(float lin) {
-			int n_11 = fn_11(lin);
-			int n_12 = fn_12(lin);
-			int n_13 = fn_13(lin);
-			int n_14 = fn_14(lin);
-			int n_21 = fn_21(lin);
-			int n_22 = fn_22(lin);
-			int n_23 = fn_23(lin);
-			int n_24 = fn_24(lin);
-			fwrite (n_11, 1, sizeof(n_11), bcd_11);
-			fwrite (n_12, 1, sizeof(n_12), bcd_12);
-			fwrite (n_13, 1, sizeof(n_13), bcd_13);
-			fwrite (n_14, 1, sizeof(n_14), bcd_14);
-			fwrite (n_21, 1, sizeof(n_21), bcd_21);
-			fwrite (n_22, 1, sizeof(n_22), bcd_22);
-			fwrite (n_23, 1, sizeof(n_23), bcd_23);
-			fwrite (n_24, 1, sizeof(n_24), bcd_24);
+
+/*int analog_to_bcd(float lin) {
+	char n_11[1], n_12[1], n_13[1], n_14[1], n_21[1], n_22[1], n_23[1], n_24[1];
+	n_11[0] = fn_11(lin);
+	n_12[0] = fn_12(lin);
+	n_13[0] = fn_13(lin);
+	n_14[0] = fn_14(lin);
+	n_21[0] = fn_21(lin);
+	n_22[0] = fn_22(lin);
+	n_23[0] = fn_23(lin);
+	n_24[0] = fn_24(lin);
+	FILE *bcd_11 = NULL;
+	FILE *bcd_12 = NULL;
+	FILE *bcd_13 = NULL;
+	FILE *bcd_14 = NULL;
+	FILE *bcd_21 = NULL;
+	FILE *bcd_22 = NULL;
+	FILE *bcd_23 = NULL;
+	FILE *bcd_24 = NULL;
+	bcd_11 = fopen("/sys/class/gpio/gpio71/value","w");
+	bcd_12 = fopen("/sys/class/gpio/gpio73/value","w");
+	bcd_13 = fopen("/sys/class/gpio/gpio75/value","w");
+	bcd_14 = fopen("/sys/class/gpio/gpio77/value","w");
+	bcd_21 = fopen("/sys/class/gpio/gpio70/value","w");
+	bcd_22 = fopen("/sys/class/gpio/gpio72/value","w");
+	bcd_23 = fopen("/sys/class/gpio/gpio74/value","w");
+	bcd_24 = fopen("/sys/class/gpio/gpio76/value","w");
+	fwrite (n_11, sizeof(int), 1, bcd_11);
+	fwrite (n_12, sizeof(int), 1, bcd_12);
+	fwrite (n_13, sizeof(int), 1, bcd_13);
+	fwrite (n_14, sizeof(int), 1, bcd_14);
+	fwrite (n_21, sizeof(int), 1, bcd_21);
+	fwrite (n_22, sizeof(int), 1, bcd_22);
+	fwrite (n_23, sizeof(int), 1, bcd_23);
+	fwrite (n_24, sizeof(int), 1, bcd_24);
+	return 0;
 }
 */
 
@@ -148,14 +165,6 @@ int main() {
     FILE *mot2 = NULL;
     FILE *f_ang = NULL;
     FILE *f_lin = NULL;
-/*  FILE *bcd_11 = NULL;
-    FILE *bcd_12 = NULL;
-    FILE *bcd_13 = NULL;
-  	FILE *bcd_14 = NULL;
-    FILE *bcd_21 = NULL;
-    FILE *bcd_22 = NULL;
-  	FILE *bcd_23 = NULL;
-  	FILE *bcd_24 = NULL;*/
     char on[] = "1";
     char off[] = "0";
 
@@ -176,14 +185,7 @@ int main() {
 	fclose(f_ang);
 	fclose(f_lin);
 
-	/*bcd_11 = fopen("/sys/class/gpio/gpio62/value","w");
-	bcd_12 = fopen("/sys/class/gpio/gpio36/value","w");
-	bcd_13 = fopen("/sys/class/gpio/gpio32/value","w");
-	bcd_14 = fopen("/sys/class/gpio/gpio86/value","w");
-	bcd_21 = fopen("/sys/class/gpio/gpio37/value","w");
-	bcd_22 = fopen("/sys/class/gpio/gpio33/value","w");
-	bcd_23 = fopen("/sys/class/gpio/gpio61/value","w");
-	bcd_24 = fopen("/sys/class/gpio/gpio88/value","w");*/
+
 	int ang = fun_ang(s_ang); //podem assumir valores entre 30 e 70
 	int lin = fun_lin(s_lin); //pode assumir valores entre 30 e 70
 
@@ -208,7 +210,7 @@ while (1!=0){
 			mot2 = fopen("/sys/class/gpio/gpio67/value", "w");
 			fwrite (off, sizeof(char), 1, mot1);
 			fwrite (on, sizeof(char), 1, mot2);
-			usleep(1000000);
+			usleep(10000);
 			fclose(mot2);
 			fclose(mot1);
 			//analog_to_bcd (lin);
@@ -219,7 +221,7 @@ while (1!=0){
 			mot2 = fopen("/sys/class/gpio/gpio67/value", "w");
 			fwrite (on, sizeof(char), 1, mot1);
 			fwrite (off, sizeof(char), 1, mot2);
-			usleep(1000000);
+			usleep(10000);
 			fclose(mot2);
 			fclose(mot1);
 			//analog_to_bcd (lin);
@@ -230,7 +232,7 @@ while (1!=0){
 				mot2 = fopen("/sys/class/gpio/gpio67/value", "w");
 				fwrite (off, sizeof(char), 1, mot1);
 				fwrite (off, sizeof(char), 1, mot2);
-				usleep(1000000);
+				usleep(10000);
 				fclose(mot2);
 				fclose(mot1);
 				//analog_to_bcd (lin);

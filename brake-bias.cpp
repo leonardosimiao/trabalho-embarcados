@@ -20,19 +20,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// quando 30, districuiçao 30-70(30 diant, 70 tras)
-// quando 70, districuiçao 70-30(70 diant, 30 tras)
-/*int unidade (float num){
-	int a, b = 0;
-	a = num/1;
-	b = a%10;
+
+// quando 30, distribuiçao 30-70(30 diant, 70 tras)
+// quando 70, distribuiçao 70-30(70 diant, 30 tras)
+int unidade (float num){
+	int a = num;
+	int b = a%10;
 	return b;
 }
 
 int dezena (float num){
-	int a, b = 0;
-	a = num/1;
-	b = a/10;
+	int a = num;
+	int b = a/10;
 	return b;
 }
 char fn_11 (float num){
@@ -108,7 +107,7 @@ int fn_24 (float num) {
 		return 0;
 	}
 }
-*/
+
 int fun_ang (float num){
 	int a = num/409;
 	a = 30 + 4*a;
@@ -121,7 +120,7 @@ int fun_lin (float num){
 	return a;
 }
 
-/*int analog_to_bcd(float lin) {
+int analog_to_bcd(float lin) {
 	char n_11[1], n_12[1], n_13[1], n_14[1], n_21[1], n_22[1], n_23[1], n_24[1];
 	n_11[0] = fn_11(lin);
 	n_12[0] = fn_12(lin);
@@ -139,14 +138,14 @@ int fun_lin (float num){
 	FILE *bcd_22 = NULL;
 	FILE *bcd_23 = NULL;
 	FILE *bcd_24 = NULL;
-	bcd_11 = fopen("/sys/class/gpio/gpio71/value","w");
-	bcd_12 = fopen("/sys/class/gpio/gpio73/value","w");
-	bcd_13 = fopen("/sys/class/gpio/gpio75/value","w");
-	bcd_14 = fopen("/sys/class/gpio/gpio77/value","w");
-	bcd_21 = fopen("/sys/class/gpio/gpio70/value","w");
-	bcd_22 = fopen("/sys/class/gpio/gpio72/value","w");
-	bcd_23 = fopen("/sys/class/gpio/gpio74/value","w");
-	bcd_24 = fopen("/sys/class/gpio/gpio76/value","w");
+	bcd_11 = fopen("/sys/class/gpio/gpio30/value","w"); //P9.11
+	bcd_12 = fopen("/sys/class/gpio/gpio31/value","w"); //P9.13
+	bcd_13 = fopen("/sys/class/gpio/gpio48/value","w"); //P9.15
+	bcd_14 = fopen("/sys/class/gpio/gpio49/value","w"); //P9.23
+	bcd_21 = fopen("/sys/class/gpio/gpio60/value","w"); //P9.12
+	bcd_22 = fopen("/sys/class/gpio/gpio50/value","w"); //P9.14
+	bcd_23 = fopen("/sys/class/gpio/gpio51/value","w"); //P9.16
+	bcd_24 = fopen("/sys/class/gpio/gpio15/value","w"); //P9.24
 	fwrite (n_11, sizeof(int), 1, bcd_11);
 	fwrite (n_12, sizeof(int), 1, bcd_12);
 	fwrite (n_13, sizeof(int), 1, bcd_13);
@@ -157,9 +156,46 @@ int fun_lin (float num){
 	fwrite (n_24, sizeof(int), 1, bcd_24);
 	return 0;
 }
-*/
 
 int main() {
+
+	//Configuração inicial das portas
+
+	// configurar entradas analógicas (necessita rodar como root)
+	system("echo BB-ADC > /sys/devices/platform/bone_capemgr/slots");
+
+	// habilitar portas do motor
+	system("echo 66 > /sys/class/gpio/export");
+	system("echo 67 > /sys/class/gpio/export");
+	system("echo 68 > /sys/class/gpio/export");
+
+	// habilitar portas do display
+	system("echo 30 > /sys/class/gpio/export");
+	system("echo 31 > /sys/class/gpio/export");
+	system("echo 48 > /sys/class/gpio/export");
+	system("echo 49 > /sys/class/gpio/export");
+	system("echo 60 > /sys/class/gpio/export");
+	system("echo 50 > /sys/class/gpio/export");
+	system("echo 51 > /sys/class/gpio/export");
+	system("echo 15 > /sys/class/gpio/export");
+
+	// configurando portas do motor como saídas
+	system("echo out > /sys/class/gpio/gpio66/direction");
+	system("echo out > /sys/class/gpio/gpio67/direction");
+	system("echo out > /sys/class/gpio/gpio68/direction");
+
+	system("echo 1 > /sys/class/gpio/gpio68/value"); // sinal do motor -> sempre definido como 1
+
+	// configurando portas do motor como saídas
+	system("echo out > /sys/class/gpio/gpio30/direction");
+	system("echo out > /sys/class/gpio/gpio31/direction");
+	system("echo out > /sys/class/gpio/gpio48/direction");
+	system("echo out > /sys/class/gpio/gpio49/direction");
+	system("echo out > /sys/class/gpio/gpio60/direction");
+	system("echo out > /sys/class/gpio/gpio50/direction");
+	system("echo out > /sys/class/gpio/gpio51/direction");
+	system("echo out > /sys/class/gpio/gpio15/direction");
+
 //    FILE *export_file = NULL;
     FILE *mot1 = NULL;
     FILE *mot2 = NULL;
@@ -206,8 +242,9 @@ while (1!=0){
 	printf("ang: %d lin %d \n", ang,lin);
 
 	if (ang > lin){
-			mot1 = fopen("/sys/class/gpio/gpio66/value", "w");
-			mot2 = fopen("/sys/class/gpio/gpio67/value", "w");
+			mot1 = fopen("/sys/class/gpio/gpio66/value", "w"); // P8.7
+			mot2 = fopen("/sys/class/gpio/gpio67/value", "w"); // P8.8
+			// sinal = fopen("/sys/class/gpio/gpio68/value", "w"); // P8.10 --> sempre definido como 1
 			fwrite (off, sizeof(char), 1, mot1);
 			fwrite (on, sizeof(char), 1, mot2);
 			usleep(10000);

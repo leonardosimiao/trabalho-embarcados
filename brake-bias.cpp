@@ -193,7 +193,7 @@ int main() {
 	system("echo out > /sys/class/gpio/gpio67/direction");
 	system("echo out > /sys/class/gpio/gpio68/direction");
 
-	system("echo 1 > /sys/class/gpio/gpio68/value"); // sinal do motor -> sempre definido como 1
+	system("echo 1 > /sys/class/gpio/gpio68/value"); // enabler do motor -> sempre definido como 1
 
 	// configurando portas do motor como saídas
 	system("echo out > /sys/class/gpio/gpio30/direction");
@@ -255,7 +255,7 @@ while (1!=0){
 	if (ang > lin){
 			mot1 = fopen("/sys/class/gpio/gpio66/value", "w"); // P8.7
 			mot2 = fopen("/sys/class/gpio/gpio67/value", "w"); // P8.8
-			// sinal = fopen("/sys/class/gpio/gpio68/value", "w"); // P8.10 --> sempre definido como 1
+			// enabler = fopen("/sys/class/gpio/gpio68/value", "w"); // P8.10 --> sempre definido como 1
 			fwrite (off, sizeof(char), 1, mot1);
 			fwrite (on, sizeof(char), 1, mot2);
 			usleep(10000);

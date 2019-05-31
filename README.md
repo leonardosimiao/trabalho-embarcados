@@ -9,4 +9,4 @@ O código config_port_minus_ADC é semelhante ao config_port, mas considera que 
 O código brake-bias é o código fonte para o trabalho.
 
 
-Na pasta bin está localizado os executáveis dos códigos descritos, compilados para ARM-linux (beaglebone black).
+Na pasta bin estão localizados os executáveis dos códigos descritos, compilados para ARM-linux (beaglebone black).

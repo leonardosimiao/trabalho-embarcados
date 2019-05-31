@@ -44,67 +44,67 @@ char fn_11 (float num){
 	}
 }
 
-int fn_12 (float num){
+char fn_12 (float num){
 	int a = unidade (num);
 	if (a==2 || a==3 || a==6 || a==7){
-		return 1;
+		return '1';
 	} else {
-		return 0;
+		return '0';
 	}
 }
 
-int fn_13 (float num){
+char fn_13 (float num){
 	int a = unidade(num);
 	if (a==4 || a==5 || a==6 || a==7){
-		return 1;
+		return '1';
 	}else{
-		return 0;
+		return '0';
 	}
 }
 
-int fn_14 (float num) {
+char fn_14 (float num) {
 	int a = unidade(num);
 	if (a==8 || a==9){
-		return 1;
+		return '1';
 	} else {
-		return 0;
+		return '0';
 	}
 }
 
-int fn_21 (float num){
+char fn_21 (float num){
 	int a = dezena (num);
 	int b = a%2;
 	if (b==1){
-		return 1;
+		return '1';
 	} else {
-		return 0;
+		return '0';
 	}
 }
 
-int fn_22 (float num){
+char fn_22 (float num){
 	int a = dezena (num);
 	if (a==2 || a==3 || a==6 || a==7){
-		return 1;
+		return '1';
 	} else{
-		return 0;
+		return '0';
 	}
 }
 
-int fn_23 (float num){
+char fn_23 (float num){
 	int a = dezena (num);
 	if (a==4|| a==5 || a==6 || a==7){
-		return 1;
+		return '1';
 	}else{
-		return 0;
+		return '0';
 	}
 }
 
-int fn_24 (float num) {
+char fn_24 (float num) {
 	int a = dezena(num);
 	if (a==8 || a==9){
-		return 1;
+		return '1';
 	} else {
-		return 0;
+		return '0';
 	}
 }
 
@@ -146,20 +146,29 @@ int analog_to_bcd(float lin) {
 	bcd_22 = fopen("/sys/class/gpio/gpio50/value","w"); //P9.14
 	bcd_23 = fopen("/sys/class/gpio/gpio51/value","w"); //P9.16
 	bcd_24 = fopen("/sys/class/gpio/gpio15/value","w"); //P9.24
-	fwrite (n_11, sizeof(int), 1, bcd_11);
-	fwrite (n_12, sizeof(int), 1, bcd_12);
-	fwrite (n_13, sizeof(int), 1, bcd_13);
-	fwrite (n_14, sizeof(int), 1, bcd_14);
-	fwrite (n_21, sizeof(int), 1, bcd_21);
-	fwrite (n_22, sizeof(int), 1, bcd_22);
-	fwrite (n_23, sizeof(int), 1, bcd_23);
-	fwrite (n_24, sizeof(int), 1, bcd_24);
+	fwrite (n_11, sizeof(char), 1, bcd_11);
+	fwrite (n_12, sizeof(char), 1, bcd_12);
+	fwrite (n_13, sizeof(char), 1, bcd_13);
+	fwrite (n_14, sizeof(char), 1, bcd_14);
+	fwrite (n_21, sizeof(char), 1, bcd_21);
+	fwrite (n_22, sizeof(char), 1, bcd_22);
+	fwrite (n_23, sizeof(char), 1, bcd_23);
+	fwrite (n_24, sizeof(char), 1, bcd_24);
+	usleep(10000);
+	fclose (bcd_11);
+	fclose (bcd_12);
+	fclose (bcd_13);
+	fclose (bcd_14);
+	fclose (bcd_21);
+	fclose (bcd_22);
+	fclose (bcd_23);
+	fclose (bcd_24);
 	return 0;
 }
 
 int main() {
 
-	//Configuração inicial das portas
+/*	//Configuração inicial das portas >> realizada em codigo proprio
 
 	// configurar entradas analógicas (necessita rodar como root)
 	system("echo BB-ADC > /sys/devices/platform/bone_capemgr/slots");
@@ -195,7 +204,7 @@ int main() {
 	system("echo out > /sys/class/gpio/gpio50/direction");
 	system("echo out > /sys/class/gpio/gpio51/direction");
 	system("echo out > /sys/class/gpio/gpio15/direction");
-
+*/
 //    FILE *export_file = NULL;
     FILE *mot1 = NULL;
     FILE *mot2 = NULL;
@@ -210,8 +219,10 @@ int main() {
 	char c_ang[7];
 	char c_lin[7];
 
-	f_ang = fopen("/sys/bus/iio/devices/iio:device0/in_voltage1_raw", "r");
-	f_lin = fopen("/sys/bus/iio/devices/iio:device0/in_voltage0_raw", "r");
+	//ground ADC -----------------------------------------------------------  P9.34
+	//vcc ADC --------------------------------------------------------------  P9.32
+	f_ang = fopen("/sys/bus/iio/devices/iio:device0/in_voltage1_raw", "r"); //P9.40
+	f_lin = fopen("/sys/bus/iio/devices/iio:device0/in_voltage0_raw", "r"); //P9.39
 
 	fread(c_ang, sizeof(char), 6, f_ang);
 	s_ang = strtol(c_ang,NULL,0);
@@ -250,7 +261,7 @@ while (1!=0){
 			usleep(10000);
 			fclose(mot2);
 			fclose(mot1);
-			//analog_to_bcd (lin);
+			analog_to_bcd (lin);
 	}
 	else {
 		if (ang < lin){
@@ -261,7 +272,7 @@ while (1!=0){
 			usleep(10000);
 			fclose(mot2);
 			fclose(mot1);
-			//analog_to_bcd (lin);
+			analog_to_bcd (lin);
 		}
 		else {
 			if (ang == lin){
@@ -272,7 +283,7 @@ while (1!=0){
 				usleep(10000);
 				fclose(mot2);
 				fclose(mot1);
-				//analog_to_bcd (lin);
+				analog_to_bcd (lin);
 			}
 		}
 	}

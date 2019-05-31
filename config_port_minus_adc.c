@@ -6,7 +6,7 @@ int main()
 	//Configuração inicial das portas
 
 	// configurar entradas analógicas (necessita rodar como root)
-	system("echo BB-ADC > /sys/devices/platform/bone_capemgr/slots");
+	//system("echo BB-ADC > /sys/devices/platform/bone_capemgr/slots");
 
 	// habilitar portas do motor
 	system("echo 66 > /sys/class/gpio/export");

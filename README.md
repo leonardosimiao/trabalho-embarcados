@@ -22,7 +22,7 @@ O código brake-bias é o código fonte para o trabalho.
 
 Na pasta [bin](https://github.com/leonardosimiao/trabalho-embarcados/tree/master/bin) estão localizados os executáveis dos códigos descritos, compilados para ARM-linux (beaglebone black).
 
-O arquivo [portas](link) demonstra como deve ser feita a conexão entre a placa e o circuito.
+O arquivo [bbb_pinout](https://github.com/leonardosimiao/trabalho-embarcados/blob/master/bbb_pinout.pdf) demonstra como deve ser feita a conexão entre a placa e o circuito.
 
 ## Vídeo Relatório
 [Clique aqui](link) para acessar o video relatório.

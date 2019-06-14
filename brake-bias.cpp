@@ -3,26 +3,21 @@
 // Author      : 
 // Version     :
 // Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
+// Description : Code of the brake bias
 //============================================================================
 
-/*
- ============================================================================
- Name    	: code brake bias.c
- Author  	:
- Version 	: 1
- Copyright   : Your copyright notice
- Description : Code of the brake bias
- ============================================================================
- */
 
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 
+// Funções para utilização do display de sete segmentos
 
+// display exibe um percentual entre 30 e 70
 // quando 30, distribuiçao 30-70(30 diant, 70 tras)
 // quando 70, distribuiçao 70-30(70 diant, 30 tras)
+
+//divisão entre o algarismo da unidade e da dezena do percentual
 int unidade (float num){
 	int a = num;
 	int b = a%10;
@@ -34,6 +29,8 @@ int dezena (float num){
 	int b = a/10;
 	return b;
 }
+
+// Funções para o display da unidade
 char fn_11 (float num){
 	int a = unidade (num);
 	int b = a%2;
@@ -71,6 +68,7 @@ char fn_14 (float num) {
 	}
 }
 
+// Funções para o display da dezena
 char fn_21 (float num){
 	int a = dezena (num);
 	int b = a%2;
@@ -108,8 +106,13 @@ char fn_24 (float num) {
 	}
 }
 
+// Funções que recebem os sinais de ambos os potenciômetros e os comparam
+// determinando o percentual de distr. tras/dir observado
+
 int fun_ang (float num){
-	int a = num/409;
+	int a = num/409;  // sinal analógico varia entre 0 e 4095
+// esta operação garante que o controle não busque que ambos os sinais sejam exatamente iguais,
+// apenas que estejam na mesma banda. A banda pode ser modificada alterando apenas esta operação
 	a = 30 + 4*a;
 	return a;
 }
@@ -120,6 +123,7 @@ int fun_lin (float num){
 	return a;
 }
 
+// Função que gerencia a exibição do display de sete segmentos
 int analog_to_bcd(float lin) {
 	char n_11[1], n_12[1], n_13[1], n_14[1], n_21[1], n_22[1], n_23[1], n_24[1];
 	n_11[0] = fn_11(lin);
@@ -168,7 +172,7 @@ int analog_to_bcd(float lin) {
 
 int main() {
 
-/*	//Configuração inicial das portas >> realizada em codigo proprio
+/*	//Configuração inicial dos pinos >> realizada em codigo próprio
 
 	// configurar entradas analógicas (necessita rodar como root)
 	system("echo BB-ADC > /sys/devices/platform/bone_capemgr/slots");
@@ -193,7 +197,7 @@ int main() {
 	system("echo out > /sys/class/gpio/gpio67/direction");
 	system("echo out > /sys/class/gpio/gpio68/direction");
 
-	system("echo 1 > /sys/class/gpio/gpio68/value"); // enabler do motor -> sempre definido como 1
+	system("echo 1 > /sys/class/gpio/gpio68/value"); // enable -> sempre definido como 1
 
 	// configurando portas do motor como saídas
 	system("echo out > /sys/class/gpio/gpio30/direction");
@@ -205,29 +209,39 @@ int main() {
 	system("echo out > /sys/class/gpio/gpio51/direction");
 	system("echo out > /sys/class/gpio/gpio15/direction");
 */
+
+
 //    FILE *export_file = NULL;
+	// inicialização das variáveis que guardarão os endereços
+	// das saídas digitais para o motor e das entradas analógicas
     FILE *mot1 = NULL;
     FILE *mot2 = NULL;
     FILE *f_ang = NULL;
     FILE *f_lin = NULL;
+
+    // sinais a serem gravados nos pinos de saída digitais
     char on[] = "1";
     char off[] = "0";
 
-	int s_ang;
-	int s_lin;
-
+	// sinais das entradas analógicas (char)
 	char c_ang[7];
 	char c_lin[7];
 
+    // variaveis que recebem as entradas convertidas de char para int
+	int s_ang;
+	int s_lin;
+
+	// Endereços dos pinos analogicos utilizados
 	//ground ADC -----------------------------------------------------------  P9.34
 	//vcc ADC --------------------------------------------------------------  P9.32
 	f_ang = fopen("/sys/bus/iio/devices/iio:device0/in_voltage1_raw", "r"); //P9.40
 	f_lin = fopen("/sys/bus/iio/devices/iio:device0/in_voltage0_raw", "r"); //P9.39
 
+
 	fread(c_ang, sizeof(char), 6, f_ang);
-	s_ang = strtol(c_ang,NULL,0);
+	s_ang = strtol(c_ang,NULL,0);   // converte char para int
 	fread(c_lin, sizeof(char), 6, f_lin);
-	s_lin = strtol(c_lin,NULL,0);
+	s_lin = strtol(c_lin,NULL,0);	// converte char para int
 
 	fclose(f_ang);
 	fclose(f_lin);
@@ -237,7 +251,9 @@ int main() {
 	int lin = fun_lin(s_lin); //pode assumir valores entre 30 e 70
 
 
-while (1!=0){
+while (1!=0){ //loop de realização da tarefa
+
+	//leitura das entradas analógicas
 
 	f_ang = fopen("/sys/bus/iio/devices/iio:device0/in_voltage1_raw", "r");
 	fread(c_ang, sizeof(char), 6, f_ang);
@@ -250,7 +266,9 @@ while (1!=0){
 	ang = fun_ang(s_ang); //podem assumir valores entre 30 e 70
 	lin = fun_lin(s_lin); //pode assumir valores entre 30 e 70
 
-	printf("ang: %d lin %d \n", ang,lin);
+	printf("ang: %d lin %d \n", ang,lin);  // para visualização em terminal
+
+	// atuação sobre o motor de acordo com a comparação entre as entradas
 
 	if (ang > lin){
 			mot1 = fopen("/sys/class/gpio/gpio66/value", "w"); // P8.7

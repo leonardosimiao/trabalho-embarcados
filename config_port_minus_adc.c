@@ -5,8 +5,8 @@ int main()
 {
 	//Configuração inicial das portas
 
-	// configurar entradas analógicas (necessita rodar como root)
-	system("echo BB-ADC > /sys/devices/platform/bone_capemgr/slots");
+	// entradas analógicas (necessita rodar como root) - consideradas como habilitadas neste código
+	//system("echo BB-ADC > /sys/devices/platform/bone_capemgr/slots");
 
 	// habilitar portas do motor
 	system("echo 66 > /sys/class/gpio/export");
@@ -28,7 +28,7 @@ int main()
 	system("echo out > /sys/class/gpio/gpio67/direction");
 	system("echo out > /sys/class/gpio/gpio68/direction");
 
-	system("echo 1 > /sys/class/gpio/gpio68/value"); // enabler motor -> sinal sempre definido como 1
+	system("echo 1 > /sys/class/gpio/gpio68/value"); // enable -> sinal sempre definido como 1
 
 	// configurando portas do motor como saídas
 	system("echo out > /sys/class/gpio/gpio30/direction");

@@ -28,7 +28,7 @@ int main()
 	system("echo out > /sys/class/gpio/gpio67/direction");
 	system("echo out > /sys/class/gpio/gpio68/direction");
 
-	system("echo 1 > /sys/class/gpio/gpio68/value"); // enabler motor -> sinal sempre definido como 1
+	system("echo 1 > /sys/class/gpio/gpio68/value"); // enable -> sinal sempre definido como 1
 
 	// configurando portas do motor como saídas
 	system("echo out > /sys/class/gpio/gpio30/direction");

@@ -27,4 +27,4 @@ Na pasta [bin](https://github.com/leonardosimiao/trabalho-embarcados/tree/master
 O arquivo [bbb_pinout](https://github.com/leonardosimiao/trabalho-embarcados/blob/master/bbb_pinout.pdf) demonstra como deve ser feita a conexão entre a placa e o circuito.
 
 ## Vídeo Relatório
-[Clique aqui](link) para acessar o video relatório.
+[Clique aqui](https://youtu.be/gwrGrYB9bkY) para acessar o video relatório.

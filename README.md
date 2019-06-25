@@ -1,4 +1,13 @@
 # Sistema de distribuição de frenagem
+
+Leonardo Simião de Luna 8006032
+
+Flavio Tarciso Ronchi 9311692
+
+Vinícius Martim 9368553
+
+Ariel Alejandro Arce Maciel 9294530
+
 ## Introdução
 Como trabalho da disciplina de sistemas embarcados, foi desenvolvido um sistema eletrônico que permite configurar a distribuição de frenagem no veículo Baja SAE da Equipe EESC USP. O sistema de freio da equipe é composto por dois cilindros mestres (dianteiro e traseiro) e um balance bar que permite a distribuição de forças entre os cilindros, obtendo valores entre de 30% e 70% na dianteira.
 
